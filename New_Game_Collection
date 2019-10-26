@@ -1,12 +1,13 @@
 import tkinter as tk
 import random
+from tkinter import ttk
 window=tk.Tk()
 
 window.geometry("500x500")
 window.title("Ultimate Minigame Collection")
-scissors=tk.PhotoImage( file = 'Scissors.gif')
-paper=tk.PhotoImage( file = 'Paper.gif')
-rock=tk.PhotoImage( file = 'Rock.gif')
+#scissors=tk.PhotoImage( file = 'Scissors.gif')
+#paper=tk.PhotoImage( file = 'Paper.gif')
+#rock=tk.PhotoImage( file = 'Rock.gif')
 
 def hit_1():
     game_1=tk.Toplevel()
@@ -91,7 +92,7 @@ def hit_2():
         
     
 def hit_3():
-    number3=0
+    digits=0
     game_3=tk.Toplevel()
     game_3.geometry("500x500")
 
@@ -100,30 +101,91 @@ def hit_3():
     game_3_digits=tk.Label(game_3,text=game_3_text,font=("Arial",20),width=20,height=1)
     game_3_digits.pack()
     
-    entry_3=tk.Entry(game_3,font=("Arial",20))
-    entry_3.pack()
+    combobox_3=ttk.Combobox(game_3,font=("Arial",20),state='readonly')
+    combobox_3['values']=[2,3,4,5,6,7,8,9]
+    combobox_3.current(0)
+    combobox_3.pack()
     def game_3_getnumber(x=None):
-        number3=entry_3.get()
-        print(number3)
-    entry_3_enter.bind("<Return>",game_3_getnumber)
-    
+        digits=combobox_3.get()
+        print(digits)
+        game_3_digits.pack_forget()
+        combobox_3_get_button.pack_forget()
+    combobox_3_get_button=tk.Button(game_3,text="Enter",command=game_3_getnumber)
+    combobox_3_get_button.pack()
     
     while():        
         quest=[]
-        
-        for i in range(number3):
+        dd=0
+        for i in range(digits):
             quest.append(random.randint(0,9))
             
         for i in range(10):
             if(quest.count(i)>1):
-                
+                dd+=dd
+            
+        if(dd==0):
+            print(quest)
+            break
+        else:
+            quest=[]
+    while(True):
+        A=0
+        B=0
+        x=0
+        while(True):
+            def answer_input_number_get():
+                x=answer_input.get()
+
+            answer_input=tk.Entry(game_3,font=("Arial",20))
+            answer_input_number=tk.Button(game_3,text="Enter",command=answer_input_number_get)
+            answer_input.pack()
+            answer_input_number.pack()
+
+            x=str(x)
+
+            t1=list(x)
+       
+            t1=int(t1)
+      
+            try:
+                for i in range(digit):
+                    t1[i]=int(t1[i])
+
+            except:
+                print("error")
+        
+            else:
+                if(len(t1)==digit):
+                    break
+                else:
+                    print("error")
+    
+        for i in range(digit):
+            if(t1[i]==quest[i]):
+                    A=A+1
+
+        for i in quest:  #i=第i個quest
+            for j in t1: #j=第j個t1
+                if(i==j):
+                    B=B+1
+        B=B-A
+
+        print("A:",A)
+
+        print("B:",B)
+        tt=tt+1
+        print("次數:",tt)  
+        if(A==digit):
+            break
+
+    while(True):
+        print("YOU WIN 總次數",tt,"次")                 
                 
         
                 
 
     
         
-    
     
 def hit_4():
     print("4")
@@ -144,3 +206,4 @@ button_3.pack()
 button_5.pack()
 
 window.mainloop()
+
