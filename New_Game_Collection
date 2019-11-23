@@ -1,5 +1,6 @@
 tt=0
 digits=0
+quest=[]
 import tkinter as tk
 import random
 from tkinter import ttk
@@ -112,20 +113,22 @@ def hit_3():
     combobox_3.pack()
     def game_3_getnumber(x=None):
         global digits
+        
+        lisbox_1=tk.Listbox(game_3)
+        lisbox_1.pack()
         digits=combobox_3.get()       
         combobox_3_get_button.pack_forget()
         combobox_3.pack_forget()
         game_3_digits.pack_forget()
         print(digits)
-        start_guess()
+        random_answer()
     combobox_3_get_button=tk.Button(game_3,text="Enter",command=game_3_getnumber)
     combobox_3_get_button.pack()
     
-    def start_guess():
-        global digits
+    def random_answer():
+        global digits,quest
         print(digits)
-        print("guess start")
-        quest=[]
+        print("random answer")
         dd=0
         for i in range(int(digits)):
             quest.append(random.randint(0,9))      
@@ -135,66 +138,77 @@ def hit_3():
 
         if(dd==0):
             print(quest)
-            answercheck()
+            start_guess()
         else:
             quest=[]
-        
-    def answercheck():
+        print('test'+quest)
+    def start_guess():
         global digits
         
         A=0
         B=0
         x=0
-        print('start answer check')
-        while(True):
-            
-            def answer_input_number_get():
-                global digits
-                answer_input=tk.Entry(game_3,font=("Arial",20))
-                x=answer_input.get()
-                answer_input_button=tk.Button(game_3,command=number_get)
-            def number_get():
-                    print("x:",x)
-                    x=str(x)
-
-                    t1=list(x)
-                
-                    print(t1)
-                    tt=0
-                    while(True):
-                        print("t1:",t1)
-                        try:
-                            for i in range(int(digits)):
-                                t1[i]=int(t1[i])
-
-                        except:
-                            print("error_1")
+        print('start guess')
         
-                        else:
-                            if(len(t1)==digits):
-                                break
-                            else:
-                                print("error_2")
-    
-                    for i in range(digits):
-                        if(t1[i]==quest[i]):
-                                A=A+1
+        def number_get():
+                global digits,quest
+                x=answer_input.get()      
+                print("x:",x)
+                str_x=str(x)
 
-                    for i in quest:  #i=第i個quest
-                        for j in t1: #j=第j個t1
-                            if(i==j):
-                                B=B+1
-                    B=B-A
-
-                    print("A:",A)
-
-                    print("B:",B)
+                t1=list(str_x)
                 
-                    tt=tt+1
-                    answer_input_number_get()
+                A=0
+                B=0
+                tt=0
+                
+                print("t1:",t1)
+                try:
+                    for i in range(int(digits)):
+                        t1[i]=int(t1[i])
+
+                except:
+                    print("error_1")
+        
+                else:
+                    if(len(str_x)==int(digits)):
+                        print("correct")
+                    else:
+                        print("error_2")
+                for i in range(int(digits)):
+                    if(t1[i]==quest[i]):
+                        A=A+1
+
+                for i in quest:  #i=第i個quest
+                    for j in t1: #j=第j個t1
+                        if(i==j):
+                            B=B+1
+                B=B-A
+
+                
+                A_Label_text="A:",A
+                A_Label=tk.Label(game_3,text=A_Label_text,font=("Arial",20),width=20,height=1)
+                
+
+                
+                B_Label_text="B:",B
+                B_Label=tk.Label(game_3,text=B_Label_text,font=("Arial",20),width=20,height=1)
+                
+                tt=tt+1
+                lisbox_1.insert('end',var)
+
+
              
-                    if(A==digits):
-                        print("次數:",tt)     
+                if(A==int(digits)):
+                    WIN_Label_text="YOU WIN 次數:",tt
+                    WIN_Label=tk.Label(game_3,text=WIN_Label_text,font=("Arial",20),width=20,height=1)
+                    WIN_Label.pack()
+        
+        print("input your answer")
+        answer_input=tk.Entry(game_3,font=("Arial",20))
+        answer_input.pack()
+        answer_input_button=tk.Button(game_3,text='輸入',command=number_get)
+        answer_input_button.pack()
                     
             
             
