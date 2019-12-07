@@ -1,0 +1,45 @@
+import tkinter as tk
+import random as rd
+window=tk.Tk()
+window.title("Math_Class")
+window.geometry("600x400")
+kind=0
+def print_selection():
+    selection.config(text=value)
+    selection.pack()
+def press():
+    global kind
+    kind=rd.randint(1,4)
+    if (kind==1):
+        Numeric="+"
+    elif (kind==2):
+        Numeric="-"
+    elif (kind==3):
+        Numeric="x"
+    else:
+        Numeric="/"
+    number1=rd.randint(1,99)
+    number2=rd.randint(1,99)
+    quest=str(number1),Numeric,str(number2)
+    print(quest)
+    quest_label.config(text=quest)
+    ans=eval(str(quest))
+    r1.pack()
+    r2.pack()
+    r3.pack()
+    r4.pack()
+r1=tk.Radiobutton(window,text="",value="A",command=print_selection)   
+r2=tk.Radiobutton(window,text="",value="B",command=print_selection)  
+r3=tk.Radiobutton(window,text="",value="C",command=print_selection)   
+r4=tk.Radiobutton(window,text="",value="D",command=print_selection)
+selection=tk.Label(window,text='123')
+    
+button=tk.Button(window,text="出題",font=("Arial",12),width=30,height=2,command=press)
+button.pack()
+quest_label=tk.Label(window,text="",font=("Arial",30))
+quest_label.pack()
+
+
+window.mainloop()
+
+
