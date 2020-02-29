@@ -1,25 +1,107 @@
-import pygame
+import pygame                                        #初始設定            
+import random
+pygame.time.Clock()
+pygame.mixer.init()
 from pygame.locals import *
 pygame.init()
-screen = pygame.display.set_mode((1080,720),0,32)
-pygame.display.set_caption("Hi")
-switch=1
-photo=[]
-for i in range(1):
+from tkinter import*
+from tkinter import messagebox
+Tk().wm_withdraw()
+
+f=open('score.txt','r')
+print(f.read())
+
+screen = pygame.display.set_mode((1080,800),0,32)
+pygame.display.set_caption("韓導與他的快樂夥伴")
+switch=1    #桶子類型  1=垃圾桶 0=資源回收桶
+i=0         #垃圾圖片
+photo=[]    #垃圾圖片陣列
+x=200       #桶子x座標
+y=400       #桶子y座標
+gx=200      #垃圾x座標
+gy=150      #垃圾y座標
+point=0     #分數
+speed=0.4   #速度
+font=pygame.font.SysFont("",40)
+text1=font.render("Point:",True,(0,0,255))
+getpointsound=pygame.mixer.Sound("Coin.wav")             #音效設定
+wronganswersound=pygame.mixer.Sound("Wrong.wav")
+gameoversound=pygame.mixer.Sound("Lose.wav")
+for i in range(12):                                      #圖片設定
     photo.append(str(i)+".png")
     photo[i]=pygame.image.load(photo[i]).convert()
-    photo[i]=pygame.transform.scale(photo[i],(150,200))
+    photo[i]=pygame.transform.scale(photo[i],(115,150))
+    print(i)
 Trash_can='Trash_can.png'
 Trash_can=pygame.image.load(Trash_can).convert()
 Trash_can=pygame.transform.scale(Trash_can,(300,400))
-while switch:
+Recycle_Bin='Recycle_Bin.png'
+Recycle_Bin=pygame.image.load(Recycle_Bin).convert()
+Recycle_Bin=pygame.transform.scale(Recycle_Bin,(300,400))
+mode=Trash_can
+while switch:                       #主程式
     
-    for event in pygame.event.get():
+    for event in pygame.event.get(): 
         if event.type == QUIT:
             switch=False
+        if event.type ==KEYDOWN:            #鍵盤操作
+            if event.key == K_SPACE:
+                if mode==Trash_can:
+                    mode=Recycle_Bin
+                else:
+                    mode=Trash_can
+    if event.type ==KEYDOWN:
+        if event.key == K_RIGHT:
+            x+=1
+        if event.key == K_LEFT:
+            x-=1
+        if event.key == K_UP:
+            y-=1
+        if event.key == K_DOWN:
+            y+=1
+    screen.fill((0,0,0))        #畫面顯示
+    screen.blit(mode,(x,y))    
+    screen.blit(photo[i],(gx,gy)) 
+    screen.blit(text1,(900,20))
+    text2=font.render(str(point),True,(0,0,255))
+    screen.blit(text2,(985,20))
+    gy+=speed
     
-            
-    screen.blit(Trash_can,(200,150))
-    screen.blit(str(0),(200,400))                  
-    pygame.display.update()
+    if gy>=720:                 #遊戲判定機制
+        gy=0
+        i=random.randint(0,11)
+        point-=1
+        wronganswersound.play()
+    if x<gx<x+300 and y<gy<y+300:
+        if i<8 and mode==Trash_can or i>7 and mode==Recycle_Bin:
+            gy=0
+            gx=random.randint(50,1030)
+            i=random.randint(0,11)
+            point+=1
+            print("point:",point)
+            if speed<0.8:
+                speed+=0.1
+            getpointsound.play()
+        else:
+            gy=0
+            gx=random.randint(50,1030)
+            i=random.randint(0,11)
+            print(i)
+            point-=1
+            wronganswersound.play()
+    
+    if (pygame.time.get_ticks()/1000)>50:
+        if point>=20:
+            messagebox.showinfo("Game Clear!","Score:"+str(point))
+           
+            switch=False
+        else:
+            messagebox.showinfo("Game Over!","Score:"+str(point))
 
+            switch=False
+   
+    pygame.display.update()
+f=open('score.txt','r')
+if point > int(f.read()):
+        fl2=open('score.txt','w+')
+        fl2.write(str(point))
